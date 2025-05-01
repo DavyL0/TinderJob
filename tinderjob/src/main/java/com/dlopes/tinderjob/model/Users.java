@@ -1,9 +1,14 @@
 package com.dlopes.tinderjob.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
+import org.springframework.scheduling.config.Task;
+
+import java.util.Set;
 
 /**
  * Project: tinderjob2
@@ -20,12 +25,28 @@ import lombok.Setter;
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "user_id")
     private Long id;
+    @NotNull
     private String username;
+    @NotNull
     private String email;
+    @NotNull
     private String password;
+    @NotNull
     private boolean admin;
     private String description;
+
+    @OneToMany(mappedBy = "user")
+    private Set<Candidatura> candidaturas;
+
+    public Set<Candidatura> getCandidaturas() {
+        return candidaturas;
+    }
+
+    public void setCandidaturas(Set<Candidatura> candidaturas) {
+        this.candidaturas = candidaturas;
+    }
 
     public String getDescription() {
         return description;

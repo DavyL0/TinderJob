@@ -1,12 +1,10 @@
 package com.dlopes.tinderjob.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+
+import java.util.List;
 
 /**
  * Project: tinderjob2
@@ -22,6 +20,7 @@ import lombok.Setter;
 public class Vagas {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "vaga_id")
     private Long id;
 
     @NotNull(message = "Nome é obrigatório")
@@ -32,11 +31,29 @@ public class Vagas {
     @Size(min = 5, max = 255, message = "A descrição deve ter entre 5 e 255 caracteres")
     private String description;
 
-    @NotNull(message = "Proprietário é obrigatório")
-    private String owner;
+    @NotNull(message = "Requisitos é obrigatória")
+    @Size(min = 5, max = 255, message = "Os requisitos deve ter entre 5 e 255 caracteres")
+    private String requisitos;
 
-    @NotNull(message = "ID de candidatos é obrigatório")
-    private Long candidatesId;
+    @OneToMany(mappedBy = "vagas")
+    private List<Candidatura> candidaturas;
+
+
+    public String getRequisitos() {
+        return requisitos;
+    }
+
+    public void setRequisitos(String requisitos) {
+        this.requisitos = requisitos;
+    }
+
+    public List<Candidatura> getCandidaturas() {
+        return candidaturas;
+    }
+
+    public void setCandidaturas(List<Candidatura> candidaturas) {
+        this.candidaturas = candidaturas;
+    }
 
     public Long getId() {
         return id;
@@ -62,19 +79,4 @@ public class Vagas {
         this.description = description;
     }
 
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
-    public Long getCandidatesId() {
-        return candidatesId;
-    }
-
-    public void setCandidatesId(Long candidatesId) {
-        this.candidatesId = candidatesId;
-    }
 }

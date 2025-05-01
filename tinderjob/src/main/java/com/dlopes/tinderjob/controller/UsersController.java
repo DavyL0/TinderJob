@@ -9,6 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+
+import java.util.Optional;
+
 /**
  * Project: tinderjob
  * Package: com.dlopes.tinderjob.controller
@@ -19,14 +22,21 @@ import org.springframework.web.bind.annotation.*;
  * Time: 22:59
  * <p>
  */
+
+
 @RestController
 @RequestMapping("/api/user")
 public class UsersController {
     @Autowired
     private UsersService usersService;
 
+    @GetMapping("/listar/{id}")
+    public ResponseEntity<Optional<Users>> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(usersService.findById(id));
+    }
+
     @PostMapping
-    private ResponseEntity<Object> create(@RequestBody Users users,BindingResult bindingResult) {
+    public ResponseEntity<Object> create(@RequestBody Users users,BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bindingResult.getAllErrors());
         }

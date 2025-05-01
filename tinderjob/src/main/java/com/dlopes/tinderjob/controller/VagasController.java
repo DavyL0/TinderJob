@@ -42,11 +42,8 @@ public class VagasController {
     @PostMapping
     public ResponseEntity<Object> create(@RequestBody @Valid Vagas vaga, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            // Se houver erros de validação, retornamos 400 com as mensagens de erro
             return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         }
-
-        // Se não houver erros, salva a vaga
         return ResponseEntity.status(HttpStatus.CREATED).body(vagaService.saveVagas(vaga));
     }
 
