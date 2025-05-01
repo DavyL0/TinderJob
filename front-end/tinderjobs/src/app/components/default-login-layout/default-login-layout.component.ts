@@ -8,7 +8,7 @@ import { Component, Input } from '@angular/core';
   styleUrl: './default-login-layout.component.scss'
 })
 export class DefaultLoginLayoutComponent {
-  @Input() tittle: string = "";
+  @Input() title: string = "";
   @Input() primaryBtnText: string = "";
   @Input() secondaryBtnText: string = "";
 }

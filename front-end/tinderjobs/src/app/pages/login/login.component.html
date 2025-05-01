@@ -1,10 +1,12 @@
 <app-default-login-layout
-    tittle="Faça login na sua conta"
+    title="Faça login na sua conta"
     primaryBtnText = "Entrar"
     secondaryBtnText = "Cadastrar"
 >
 
 <form [formGroup]="loginForm">
-    
+    <app-primary-input>
+        <img src="/assets/svg/email-icon.svg" alt="">
+    </app-primary-input>
 </form>
 </app-default-login-layout>
