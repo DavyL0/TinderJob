@@ -5,6 +5,8 @@ import org.apache.catalina.User;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.Optional;
+
 /**
  * Project: tinderjob2
  * Package: com.dlopes.tinderjob.repository
@@ -16,5 +18,5 @@ import org.springframework.data.repository.CrudRepository;
  * <p>
  */
 public interface UsersRepository extends CrudRepository<Users, Long> {
-    Users findByEmail(String email);
+    Optional<Users> findByEmail(String email);
 }

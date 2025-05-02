@@ -17,7 +17,7 @@ import java.util.Optional;
 public interface IUsersService {
     Users save(Users users);
     Optional<Users> findById(Long id);
-    Users findByEmail(String email);
+    Optional<Users> findByEmail(String email);
     Users update(Users users);
     void deleteById(Long id);
 
