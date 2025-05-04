@@ -1,6 +1,6 @@
 package com.dlopes.tinderjob.service;
 
-import com.dlopes.tinderjob.model.Vagas;
+import com.dlopes.tinderjob.model.Vaga;
 import com.dlopes.tinderjob.repository.VagasRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,17 +25,17 @@ public class VagasService implements IVagasService {
     private VagasRepository vagaRepository;
 
     @Override
-    public Vagas saveVagas(Vagas vagas) {
+    public Vaga saveVagas(Vaga vagas) {
         return vagaRepository.save(vagas);
     }
 
     @Override
-    public List<Vagas> findAll() {
+    public List<Vaga> findAll() {
         return vagaRepository.findAll();
     }
 
     @Override
-    public Optional<Vagas> findVagasById(Long id) {
+    public Optional<Vaga> findVagasById(Long id) {
         return vagaRepository.findById(id);
     }
 

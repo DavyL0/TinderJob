@@ -1,6 +1,9 @@
 package com.dlopes.tinderjob.controller;
 
-import com.dlopes.tinderjob.model.Vagas;
+import com.dlopes.tinderjob.model.User;
+import com.dlopes.tinderjob.model.Vaga;
+import com.dlopes.tinderjob.repository.UsersRepository;
+import com.dlopes.tinderjob.repository.VagasRepository;
 import com.dlopes.tinderjob.service.VagasService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -23,32 +27,38 @@ import java.util.Optional;
  * <p>
  */
 @RestController
-@RequestMapping("/api/vagas")
+@RequestMapping("/vagas")
 public class VagasController {
 
     @Autowired
     private VagasService vagaService;
 
+    @Autowired
+    private VagasRepository vagaRepository;
+
+    @Autowired
+    private UsersRepository userRepository;
+
     @GetMapping("/listar")
-    public ResponseEntity<List<Vagas>> findAll() {
+    public ResponseEntity<List<Vaga>> findAll() {
         return ResponseEntity.ok(vagaService.findAll());
     }
 
-    @GetMapping("/listar/{id}")
-    public ResponseEntity<Optional<Vagas>> findById(@PathVariable String id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<Vaga>> findById(@PathVariable String id) {
         return ResponseEntity.ok(vagaService.findVagasById(Long.valueOf(id)));
     }
 
     @PostMapping
-    public ResponseEntity<Object> create(@RequestBody @Valid Vagas vaga, BindingResult bindingResult) {
+    public ResponseEntity<Object> create(@RequestBody @Valid Vaga vaga, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(vagaService.saveVagas(vaga));
     }
 
-    @PutMapping("/modificar")
-    public ResponseEntity<Object> update(@RequestBody @Valid Vagas vaga, BindingResult bindingResult) {
+    @PutMapping("/modificar/{id}")
+    public ResponseEntity<Object> update(@RequestBody @Valid Vaga vaga, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         }
@@ -58,6 +68,24 @@ public class VagasController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         vagaService.deleteVagasById(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{vagaId}/candidatar/{userId}")
+    public ResponseEntity<?> candidatarUsuario(@PathVariable Long vagaId, @PathVariable Long userId) {
+        Optional<Vaga> vagaOpt = vagaRepository.findById(vagaId);
+        Optional<User> userOpt = userRepository.findById(userId);
+
+        if (vagaOpt.isEmpty() || userOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Vaga vaga = vagaOpt.get();
+        User user = userOpt.get();
+
+        vaga.getUsers().add(user);
+        vagaRepository.save(vaga);
+
         return ResponseEntity.ok().build();
     }
 }

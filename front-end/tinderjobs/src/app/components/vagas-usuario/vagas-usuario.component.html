@@ -1,0 +1,6 @@
+<div *ngFor="let vaga of vagas" class="vaga-card">
+    <h3>{{ vaga.nome }}</h3>
+    <p>{{ vaga.description }}</p>
+    <button (click)="candidatar(vaga.id!)">Candidatar-se</button>
+  </div>
+  

@@ -10,5 +10,6 @@ package com.dlopes.tinderjob.dto;
  * Time: 01:38
  * <p>
  */
-public record RegisterRequestDTO(String name, String email, String password) {
+public record RegisterRequestDTO(String name, String email, String password, Boolean admin) {
+
 }

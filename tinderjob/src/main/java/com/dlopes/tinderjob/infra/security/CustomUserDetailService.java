@@ -1,6 +1,6 @@
 package com.dlopes.tinderjob.infra.security;
 
-import com.dlopes.tinderjob.model.Users;
+import com.dlopes.tinderjob.model.User;
 import com.dlopes.tinderjob.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,7 +28,7 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Users user = this.usersRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException(username));
+        User user = this.usersRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException(username));
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), new ArrayList<>());
     }
 }

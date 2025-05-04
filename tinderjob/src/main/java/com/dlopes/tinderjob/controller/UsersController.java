@@ -1,6 +1,7 @@
 package com.dlopes.tinderjob.controller;
 
-import com.dlopes.tinderjob.model.Users;
+import com.dlopes.tinderjob.dto.UserUpdateDTO;
+import com.dlopes.tinderjob.model.User;
 import com.dlopes.tinderjob.service.UsersService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,18 +26,18 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/user")
 public class UsersController {
     @Autowired
     private UsersService usersService;
 
     @GetMapping("/listar/{id}")
-    public ResponseEntity<Optional<Users>> findById(@PathVariable Long id) {
+    public ResponseEntity<Optional<User>> findById(@PathVariable Long id) {
         return ResponseEntity.ok(usersService.findById(id));
     }
 
     @PostMapping
-    public ResponseEntity<Object> create(@RequestBody Users users,BindingResult bindingResult) {
+    public ResponseEntity<Object> create(@RequestBody User users, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bindingResult.getAllErrors());
         }
@@ -44,12 +45,13 @@ public class UsersController {
     }
 
 
-    @PutMapping("/modificar")
-    public ResponseEntity<Object> update(@RequestBody @Valid Users users, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
-        }
-        return ResponseEntity.ok(usersService.save(users));
+    @PutMapping("/{email}")
+    public ResponseEntity<User> updateUser(
+            @PathVariable String email,
+            @RequestBody UserUpdateDTO userUpdateDTO) {
+
+        User updatedUser = usersService.updateUser(email, userUpdateDTO);
+        return ResponseEntity.ok(updatedUser);
     }
 
     @DeleteMapping("/{id}")

@@ -1,6 +1,6 @@
 package com.dlopes.tinderjob.service;
 
-import com.dlopes.tinderjob.model.Users;
+import com.dlopes.tinderjob.model.User;
 
 import java.util.Optional;
 
@@ -15,10 +15,10 @@ import java.util.Optional;
  * <p>
  */
 public interface IUsersService {
-    Users save(Users users);
-    Optional<Users> findById(Long id);
-    Optional<Users> findByEmail(String email);
-    Users update(Users users);
+    User save(User user);
+    Optional<User> findById(Long id);
+    Optional<User> findByEmail(String email);
+    User update(User users);
     void deleteById(Long id);
 
 

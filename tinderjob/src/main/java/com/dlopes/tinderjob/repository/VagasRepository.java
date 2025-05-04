@@ -1,6 +1,6 @@
 package com.dlopes.tinderjob.repository;
 
-import com.dlopes.tinderjob.model.Vagas;
+import com.dlopes.tinderjob.model.Vaga;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -14,5 +14,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * <p>
  */
 
-public interface VagasRepository extends JpaRepository<Vagas, Long> {
+public interface VagasRepository extends JpaRepository<Vaga, Long> {
 }

@@ -1,6 +1,6 @@
 package com.dlopes.tinderjob.service;
 
-import com.dlopes.tinderjob.model.Vagas;
+import com.dlopes.tinderjob.model.Vaga;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,8 +16,8 @@ import java.util.Optional;
  * <p>
  */
 public interface IVagasService {
-    Vagas saveVagas(Vagas vagas);
-    List<Vagas> findAll();
-    Optional<Vagas> findVagasById(Long id);
+    Vaga saveVagas(Vaga vagas);
+    List<Vaga> findAll();
+    Optional<Vaga> findVagasById(Long id);
     void deleteVagasById(Long id);
 }

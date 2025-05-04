@@ -4,9 +4,8 @@ import com.dlopes.tinderjob.dto.LoginRequestDTO;
 import com.dlopes.tinderjob.dto.RegisterRequestDTO;
 import com.dlopes.tinderjob.dto.ResponseDTO;
 import com.dlopes.tinderjob.infra.security.TokenService;
-import com.dlopes.tinderjob.model.Users;
+import com.dlopes.tinderjob.model.User;
 import com.dlopes.tinderjob.repository.UsersRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,19 +20,23 @@ import java.util.Optional;
  * Project: tinderjob
  * Package: com.dlopes.tinderjob.controller
  * <p>
- * User: MegaD
+ * User: Davy Lopes
  * Email: davylopes866@gmail.com
  * Date: 02/05/2025
  * Time: 01:25
  * <p>
  */
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
+
     @Autowired
     private final UsersRepository usersRepository;
+
     @Autowired
     private final PasswordEncoder passwordEncoder;
+
     @Autowired
     private final TokenService tokenService;
 
@@ -45,30 +48,29 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody LoginRequestDTO body) {
-        Users user = this.usersRepository.findByEmail(body.email()).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = this.usersRepository.findByEmail(body.email()).orElseThrow(() -> new RuntimeException("User not found"));
         if (passwordEncoder.matches(body.password(), user.getPassword())) {
             String token = this.tokenService.generateToken(user);
-            return ResponseEntity.ok(new ResponseDTO(user.getUsername(), token));
+            return ResponseEntity.ok(new ResponseDTO(user.getId(), user.getUsername(), token, user.isAdmin()));
         }
         return ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody RegisterRequestDTO body) {
-        Optional<Users> user = this.usersRepository.findByEmail(body.email());
-        if (user.isEmpty()) {
-            Users newUser = new Users();
-            newUser.setPassword(passwordEncoder.encode(body.password()));
-            newUser.setEmail(body.email());
-            newUser.setUsername(body.email());
-            this.usersRepository.save(newUser);
+        if (usersRepository.findByEmail(body.email()).isPresent()) {
+            return ResponseEntity.badRequest().body("Email já cadastrado");
+        }
 
-            String token = this.tokenService.generateToken(newUser);
-            return ResponseEntity.ok(new ResponseDTO(newUser.getUsername(), token));
+        User newUser = new User();
+        newUser.setUsername(body.name());
+        newUser.setEmail(body.email());
+        newUser.setPassword(passwordEncoder.encode(body.password()));
+        newUser.setAdmin(body.admin());
 
-            }
+        User savedUser = usersRepository.save(newUser);
 
-        return ResponseEntity.badRequest().build();
+        String token = tokenService.generateToken(savedUser);
+        return ResponseEntity.ok(new ResponseDTO(savedUser.getId(), savedUser.getUsername(), token, savedUser.isAdmin()));
     }
-
 }

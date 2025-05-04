@@ -1,6 +1,6 @@
 package com.dlopes.tinderjob.infra.security;
 
-import com.dlopes.tinderjob.model.Users;
+import com.dlopes.tinderjob.model.User;
 import com.dlopes.tinderjob.repository.UsersRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -39,7 +39,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         var login = tokenService.validateToken(token);
 
         if(login != null){
-            Users user = usersRepository.findByEmail(login).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+            User user = usersRepository.findByEmail(login).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
             var authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
             var authentication = new UsernamePasswordAuthenticationToken(user, null, authorities);
             SecurityContextHolder.getContext().setAuthentication(authentication);

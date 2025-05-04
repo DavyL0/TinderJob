@@ -1,0 +1,13 @@
+<form (ngSubmit)="salvarVaga()">
+  <input [(ngModel)]="vaga.nome" name="nome" placeholder="Nome" required />
+  <input [(ngModel)]="vaga.description" name="description" placeholder="Descrição" required />
+  <button type="submit">Salvar</button>
+</form>
+
+<ul>
+  <li *ngFor="let vaga of vagas">
+    <strong>{{ vaga.nome }}</strong> - {{ vaga.description }}
+    <button (click)="editar(vaga)">Editar</button>
+    <button (click)="excluir(vaga.id!)">Excluir</button>
+  </li>
+</ul>
