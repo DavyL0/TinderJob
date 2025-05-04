@@ -1,13 +1,47 @@
-<form (ngSubmit)="salvarVaga()">
-  <input [(ngModel)]="vaga.nome" name="nome" placeholder="Nome" required />
-  <input [(ngModel)]="vaga.description" name="description" placeholder="Descrição" required />
-  <button type="submit">Salvar</button>
-</form>
+<div class="vagas">
+  <div class="form-vagas-div">
+    <form (ngSubmit)="salvarVaga()" class="vaga-form">
+      <span>Criar/Editar Vaga</span>
+      <input
+        [(ngModel)]="vaga.nome"
+        name="nome"
+        placeholder="Nome da vaga"
+        required
+      />
 
-<ul>
-  <li *ngFor="let vaga of vagas">
-    <strong>{{ vaga.nome }}</strong> - {{ vaga.description }}
-    <button (click)="editar(vaga)">Editar</button>
-    <button (click)="excluir(vaga.id!)">Excluir</button>
-  </li>
-</ul>
+      <input
+        [(ngModel)]="vaga.description"
+        name="description"
+        placeholder="Descrição"
+        required
+      />
+
+      <select [(ngModel)]="vaga.status" name="status" required>
+        <option value="" disabled selected>Status da vaga</option>
+        <option value="ABERTA">ABERTA</option>
+        <option value="PENDENTE">PENDENTE</option>
+        <option value="FECHADA">FECHADA</option>
+      </select>
+
+      <button type="submit">Salvar</button>
+    </form>
+  </div>
+
+  <div class="card-box">
+    <div *ngFor="let vaga of vagas" class="card">
+      <div class="card-border-top"></div>
+      <span>{{ vaga.nome }}</span>
+      <p class="job">{{ vaga.description }}</p>
+
+      <div class="card-buttons">
+        <button (click)="editar(vaga)">
+          <img src="assets/svg/editar.svg" alt="Editar">
+        </button>
+        <button (click)="excluir(vaga.id!)">
+          <img src="assets/svg/lixeira.svg" alt="Excluir">
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
