@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Project: tinderjob
@@ -54,7 +55,7 @@ public class UsersService implements IUsersService {
         if (userUpdateDTO.getVaga_id() != null) {
             Vaga vaga = vagasRepository.findById(userUpdateDTO.getVaga_id())
                     .orElseThrow(() -> new EntityNotFoundException("Vaga não encontrada"));
-            user.setVaga(vaga);
+            user.setVagas((Set<Vaga>) vaga);
         }
 
         return usersRepository.save(user);
@@ -78,6 +79,18 @@ public class UsersService implements IUsersService {
     @Override
     public void deleteById(Long id) {
         usersRepository.deleteById(id);
+    }
+
+    @Override
+    public User adicionarCandidatura(Long userId, Long vagaId) {
+        User user = usersRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        Vaga vaga = vagasRepository.findById(vagaId)
+                .orElseThrow(() -> new RuntimeException("Vaga não encontrada"));
+
+        user.setVagas((Set<Vaga>) vaga);
+        return usersRepository.save(user);
     }
 
 }

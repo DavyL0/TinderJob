@@ -1,1 +1,20 @@
-<p>user-info works!</p>
+<div *ngIf="usuario" class="container">
+    <h3>Sua Descrição</h3>
+    <p class="subtitle">Essa é a informação que os recrutadores receberam de você!</p>
+  
+    <div *ngIf="!isEditing">
+      <p class="description-display">{{ usuario.description }}</p>
+      <div class="btn-group">
+        <button (click)="toggleEdit()" class="edit">Editar</button>
+      </div>
+    </div>
+  
+    <div *ngIf="isEditing">
+      <textarea [(ngModel)]="usuario.description" rows="5" placeholder="Escreva sua nova descrição..."></textarea>
+      <div class="btn-group">
+        <button (click)="saveDescription(usuario.description)" class="save">Salvar</button>
+        <button (click)="toggleEdit()" class="cancel">Cancelar</button>
+      </div>
+    </div>
+  </div>
+  

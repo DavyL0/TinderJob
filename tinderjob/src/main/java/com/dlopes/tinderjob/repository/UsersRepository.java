@@ -1,7 +1,7 @@
 package com.dlopes.tinderjob.repository;
 
 import com.dlopes.tinderjob.model.User;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
@@ -15,6 +15,7 @@ import java.util.Optional;
  * Time: 22:43
  * <p>
  */
-public interface UsersRepository extends CrudRepository<User, Long> {
+public interface UsersRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
+    Optional<User> findById(Long id);
 }

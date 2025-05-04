@@ -9,11 +9,12 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -32,12 +33,11 @@ public class VagasController {
 
     @Autowired
     private VagasService vagaService;
-
     @Autowired
-    private VagasRepository vagaRepository;
-
+    private VagasRepository vagasRepository;
     @Autowired
-    private UsersRepository userRepository;
+    private UsersRepository usersRepository;
+
 
     @GetMapping("/listar")
     public ResponseEntity<List<Vaga>> findAll() {
@@ -71,21 +71,20 @@ public class VagasController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/{vagaId}/candidatar/{userId}")
-    public ResponseEntity<?> candidatarUsuario(@PathVariable Long vagaId, @PathVariable Long userId) {
-        Optional<Vaga> vagaOpt = vagaRepository.findById(vagaId);
-        Optional<User> userOpt = userRepository.findById(userId);
+    @PutMapping("/{id}/candidatar")
+    public ResponseEntity<?> candidatar(@PathVariable Long id, @AuthenticationPrincipal User user) {
+        var vaga = vagasRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        if (vagaOpt.isEmpty() || userOpt.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
+        // Recarrega o usuário diretamente do banco
+        var usuario = usersRepository.findById(user.getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
-        Vaga vaga = vagaOpt.get();
-        User user = userOpt.get();
+        usuario.getVagas().add(vaga);
+        usersRepository.save(usuario); // Agora sim, persistência correta
 
-        vaga.getUsers().add(user);
-        vagaRepository.save(vaga);
-
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Candidatura realizada com sucesso.");
     }
+
+
 }

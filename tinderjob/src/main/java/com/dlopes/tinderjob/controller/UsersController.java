@@ -3,10 +3,10 @@ package com.dlopes.tinderjob.controller;
 import com.dlopes.tinderjob.dto.UserUpdateDTO;
 import com.dlopes.tinderjob.model.User;
 import com.dlopes.tinderjob.service.UsersService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,6 +35,16 @@ public class UsersController {
     public ResponseEntity<Optional<User>> findById(@PathVariable Long id) {
         return ResponseEntity.ok(usersService.findById(id));
     }
+
+    @GetMapping("/me")
+    public ResponseEntity<User> getUsuarioLogado(@AuthenticationPrincipal User usuario) {
+        if (usuario == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.ok(usuario);
+    }
+
+
 
     @PostMapping
     public ResponseEntity<Object> create(@RequestBody User users, BindingResult bindingResult) {

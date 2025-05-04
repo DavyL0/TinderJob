@@ -3,6 +3,8 @@ package com.dlopes.tinderjob.repository;
 import com.dlopes.tinderjob.model.Vaga;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 /**
  * Project: tinderjob2
  * Package: com.dlopes.tinderjob.repository
@@ -15,4 +17,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 
 public interface VagasRepository extends JpaRepository<Vaga, Long> {
+    Optional<Vaga> findById(Long id);
 }

@@ -26,7 +26,8 @@ export class VagaService {
     return this.http.delete<void>(`${this.api}/${id}`);
   }
 
-  candidatarSe(idVaga: number, idUser: number): Observable<any> {
-    return this.http.put(`${this.api}/${idVaga}/candidatar/${idUser}`, {});
+  candidatarSe(idVaga: number): Observable<any> {
+    return this.http.put(`${this.api}/${idVaga}/candidatar`, {});
   }
+  
 }

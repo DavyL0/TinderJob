@@ -1,29 +1,21 @@
 package com.dlopes.tinderjob.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
-import java.util.List;
-
-/**
- * Project: tinderjob
- * Package: com.dlopes.tinderjob.model
- * <p>
- * User: MegaD
- * Email: davylopes866@gmail.com
- * Date: 02/05/2025
- * Time: 19:10
- * <p>
- */
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "VAGAS")
 public class Vaga {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Alterado para IDENTITY
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "vaga_id")
     private Long id;
 
     @NotNull(message = "Nome é obrigatório")
@@ -39,15 +31,17 @@ public class Vaga {
     private String requisitos;
 
     @NotNull
-    @Column(length = 20) // Define o tamanho máximo
+    @Column(length = 20)
     private String status;
 
     @Column(name = "data_criacao")
-    private LocalDate dataCriacao = LocalDate.now(); // Renomeado para match com o banco
+    private LocalDate dataCriacao = LocalDate.now();
 
-    @OneToMany(mappedBy = "vaga")
-    @JsonIgnore // Adicionado para evitar serialização circular
-    private List<User> users; // Renomeado para plural
+    @ManyToMany(mappedBy = "vagas", fetch = FetchType.LAZY)
+    @JsonBackReference
+    private Set<User> users = new HashSet<>();
+
+    // Getters e Setters
 
     public Long getId() {
         return id;
@@ -97,12 +91,11 @@ public class Vaga {
         this.dataCriacao = dataCriacao;
     }
 
-    public List<User> getUsers() {
+    public Set<User> getUsers() {
         return users;
     }
 
-    public void setUsers(List<User> users) {
+    public void setUsers(Set<User> users) {
         this.users = users;
     }
 }
-

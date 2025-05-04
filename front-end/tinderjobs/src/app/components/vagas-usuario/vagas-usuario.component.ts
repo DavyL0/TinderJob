@@ -26,9 +26,15 @@ export class VagasUsuarioComponent implements OnInit {
   candidatar(vagaId: number) {
     if (!this.userId) return;
 
-    this.vagaService.candidatarSe(vagaId, this.userId).subscribe({
-      next: () => alert('Candidatura realizada com sucesso'),
-      error: () => alert('Erro ao se candidatar')
+    this.vagaService.candidatarSe(vagaId).subscribe({
+      next: () => {
+        alert('Candidatura realizada com sucesso!');
+        // opcional: atualizar os dados da vaga
+      },
+      error: (err) => {
+        console.error(err);
+        alert('Erro ao se candidatar à vaga.');
+      }
     });
   }
 }

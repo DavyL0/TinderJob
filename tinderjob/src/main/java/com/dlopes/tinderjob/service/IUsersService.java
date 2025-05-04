@@ -18,8 +18,11 @@ public interface IUsersService {
     User save(User user);
     Optional<User> findById(Long id);
     Optional<User> findByEmail(String email);
+
     User update(User users);
+
     void deleteById(Long id);
 
 
+    User adicionarCandidatura(Long userId, Long vagaId);
 }

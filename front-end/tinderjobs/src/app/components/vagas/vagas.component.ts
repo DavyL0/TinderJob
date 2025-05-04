@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Vaga } from '../../types/vaga.type';
 import { VagaService } from '../../services/vagas.service';
-import { CommonModule, getLocaleDateFormat } from '@angular/common';
+import { CommonModule} from '@angular/common';
 
 
 @Component({
@@ -33,7 +33,9 @@ export class VagasComponent implements OnInit {
   }
 
   carregarVagas() {
-    this.vagaService.getTodasVagas().subscribe((vagas) => (this.vagas = vagas));
+    this.vagaService.getTodasVagas().subscribe((vagas: Vaga[]) => {
+      this.vagas = vagas
+  });
   }
 
   salvarVaga() {
