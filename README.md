@@ -80,7 +80,6 @@ docker-compose up --build
 - Cadastro e login com autenticação JWT
 - CRUD de usuários (empresas e candidatos)
 - Publicação e gerenciamento de vagas
-- Sistema de curtidas e "matches" entre perfis e vagas
 - Interface amigável com Angular Material
 
 ## 📄 Licença
