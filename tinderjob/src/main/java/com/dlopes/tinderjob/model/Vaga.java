@@ -1,6 +1,7 @@
 package com.dlopes.tinderjob.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -38,7 +39,7 @@ public class Vaga {
     private LocalDate dataCriacao = LocalDate.now();
 
     @ManyToMany(mappedBy = "vagas", fetch = FetchType.LAZY)
-    @JsonBackReference
+    @JsonIgnore
     private Set<User> users = new HashSet<>();
 
     // Getters e Setters

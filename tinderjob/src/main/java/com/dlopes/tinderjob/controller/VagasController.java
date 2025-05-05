@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -83,7 +84,8 @@ public class VagasController {
         usuario.getVagas().add(vaga);
         usersRepository.save(usuario); // Agora sim, persistência correta
 
-        return ResponseEntity.ok("Candidatura realizada com sucesso.");
+        return ResponseEntity.ok(Map.of("message", "Candidatura realizada com sucesso."));
+
     }
 
 
