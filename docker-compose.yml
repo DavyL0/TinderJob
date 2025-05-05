@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: tinderjob-db
+    environment:
+      POSTGRES_DB: tinderjob
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - tinderjob-network
+
+  adminer:
+    image: adminer
+    container_name: adminer
+    ports:
+      - "8081:8080"
+    networks:
+      - tinderjob-network
+    depends_on:
+      - postgres
+
+  backend:
+    build: ./backend
+    container_name: tinderjob-backend
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/tinderjob
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+    depends_on:
+      - postgres
+    networks:
+      - tinderjob-network
+
+  frontend:
+    build: ./front-end
+    container_name: tinderjob-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    networks:
+      - tinderjob-network
+
+networks:
+  tinderjob-network:
+    driver: bridge
+
+volumes:
+  pgdata:
