@@ -1,0 +1,27 @@
+<div class="table-cad">
+    
+    <table *ngIf="vagasComCandidatos.length > 0" class="table">
+    <thead>
+      <tr>
+        <th>Vaga</th>
+        <th>Candidatos</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let vaga of vagasComCandidatos">
+        <td>{{ vaga.vagaNome }}</td>
+        <td>
+          <ul>
+            <li *ngFor="let candidato of vaga.candidatos">
+              {{ candidato.nome }} - {{ candidato.email }}
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div *ngIf="vagasComCandidatos.length === 0">
+    <p>Não há vagas ou candidatos para exibir no momento.</p>
+  </div></div>
+
+  

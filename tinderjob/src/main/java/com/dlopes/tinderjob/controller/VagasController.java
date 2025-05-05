@@ -1,5 +1,7 @@
 package com.dlopes.tinderjob.controller;
 
+import com.dlopes.tinderjob.dto.CandidatoDTO;
+import com.dlopes.tinderjob.dto.VagaCandidatosDTO;
 import com.dlopes.tinderjob.model.User;
 import com.dlopes.tinderjob.model.Vaga;
 import com.dlopes.tinderjob.repository.UsersRepository;
@@ -17,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Project: tinderjob
@@ -49,6 +52,26 @@ public class VagasController {
     public ResponseEntity<Optional<Vaga>> findById(@PathVariable String id) {
         return ResponseEntity.ok(vagaService.findVagasById(Long.valueOf(id)));
     }
+
+    @GetMapping("/vagas-com-candidatos")
+    public ResponseEntity<List<VagaCandidatosDTO>> getVagasComCandidatos() {
+        List<Vaga> vagas = vagasRepository.findAll(); // Pega todas as vagas
+
+        // Converte as vagas para um DTO que inclui os candidatos
+        List<VagaCandidatosDTO> vagasComCandidatos = vagas.stream().map(vaga -> {
+            VagaCandidatosDTO vagaDTO = new VagaCandidatosDTO();
+            vagaDTO.setVagaId(vaga.getId());
+            vagaDTO.setVagaNome(vaga.getNome());
+            vagaDTO.setCandidatos(vaga.getUsers().stream()
+                    .map(user -> new CandidatoDTO(user.getId(), user.getUsername(), user.getEmail()))  // Cria a lista de candidatos
+                    .collect(Collectors.toList()));
+            return vagaDTO;
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.ok(vagasComCandidatos);
+    }
+
+
 
     @PostMapping
     public ResponseEntity<Object> create(@RequestBody @Valid Vaga vaga, BindingResult bindingResult) {

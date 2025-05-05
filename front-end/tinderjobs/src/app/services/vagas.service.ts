@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Vaga } from '../types/vaga.type';
+import { VagaCandidatosDTO } from '../types/vaga-candidatos.type';
+
 
 @Injectable({ providedIn: 'root' })
 export class VagaService {
@@ -29,5 +31,13 @@ export class VagaService {
   candidatarSe(idVaga: number): Observable<any> {
     return this.http.put(`${this.api}/${idVaga}/candidatar`, {});
   }
+
+  
+  // vaga.service.ts
+  getVagasComCandidatos(): Observable<VagaCandidatosDTO[]> {
+    return this.http.get<VagaCandidatosDTO[]>(`${this.api}/vagas-com-candidatos`);
+  }
+
+
   
 }

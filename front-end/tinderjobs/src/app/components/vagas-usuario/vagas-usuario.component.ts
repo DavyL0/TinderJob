@@ -1,9 +1,8 @@
-import { CommonModule } from "@angular/common";
-import { Component, OnInit } from "@angular/core";
-import { VagaService } from "../../services/vagas.service";
-import { LoginService } from "../../services/login.service";
-import { Vaga } from "../../types/vaga.type";
-
+import { Component, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
+import { VagaService } from '../../services/vagas.service';
+import { Vaga } from '../../types/vaga.type';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-vagas-usuario',
@@ -12,29 +11,32 @@ import { Vaga } from "../../types/vaga.type";
   templateUrl: './vagas-usuario.component.html',
   styleUrls: ['./vagas-usuario.component.scss']
 })
+
 export class VagasUsuarioComponent implements OnInit {
   vagas: Vaga[] = [];
-  userId: number | null = null;
 
-  constructor(private vagaService: VagaService, private loginService: LoginService) {}
+  constructor(
+    private vagaService: VagaService,
+    private toastr: ToastrService
+  ) {}
 
-  ngOnInit() {
-    this.userId = Number(sessionStorage.getItem('user_id'));
-    this.vagaService.getTodasVagas().subscribe((vagas) => (this.vagas = vagas));
+  ngOnInit(): void {
+    this.vagaService.getTodasVagas().subscribe({
+      next: (res) => (this.vagas = res),
+      error: () => this.toastr.error('Erro ao carregar vagas')
+    });
   }
 
-  candidatar(vagaId: number) {
-    if (!this.userId) return;
+  candidatar(vagaId: number): void {
+    const userId = Number(sessionStorage.getItem('user_id'));
+    if (!userId) {
+      this.toastr.error('Usuário não autenticado');
+      return;
+    }
 
     this.vagaService.candidatarSe(vagaId).subscribe({
-      next: () => {
-        alert('Candidatura realizada com sucesso!');
-        // opcional: atualizar os dados da vaga
-      },
-      error: (err) => {
-        console.error(err);
-        alert('Erro ao se candidatar à vaga.');
-      }
+      next: () => this.toastr.success('Candidatura realizada com sucesso!'),
+      error: () => this.toastr.error('Erro ao se candidatar à vaga')
     });
   }
 }

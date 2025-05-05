@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { UsuarioService } from '../../services/user.service';
 import { Usuario } from '../../types/usuario.type';
-import { UserUpdateDTO } from '../../types/user-update.dto';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { UserUpdateDTO } from '../../types/user-update.type';
 
 @Component({
   standalone: true,
